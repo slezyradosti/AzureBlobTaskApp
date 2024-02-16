@@ -1,4 +1,5 @@
 using Application;
+using Application.BlobService;
 
 var builder = WebApplication.CreateBuilder(args);
 
