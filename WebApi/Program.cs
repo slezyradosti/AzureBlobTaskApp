@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<BlobSecurity>(builder.Configuration.GetSection("AzureBlob"));
+builder.Services.AddScoped<IBlobService, BlobService>();
 
 var app = builder.Build();
 

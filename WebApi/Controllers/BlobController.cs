@@ -2,9 +2,10 @@
 
 namespace WebApi.Controllers
 {
-    public class BlobController : Controller
+    public class BlobController : BaseApiController
     {
-        public IActionResult Index()
+        [HttpPost]
+        public IActionResult AddBlob()
         {
             return View();
         }

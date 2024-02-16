@@ -2,7 +2,7 @@
 
 namespace Application
 {
-    public class BlobService
+    public class BlobService : IBlobService
     {
         private readonly IOptions<BlobSecurity> _configuration;
 
