@@ -6,6 +6,6 @@ namespace Application.BlobService
 {
     public interface IBlobService
     {
-        public Task<Result<CloudBlockBlob>> UploadBlobAsync(string BlobName, string ContainerName, IFormFile file);
+        public Task<Result<string>> UploadBlobAsync(string BlobName, string ContainerName, IFormFile file);
     }
 }

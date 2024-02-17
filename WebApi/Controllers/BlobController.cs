@@ -1,5 +1,4 @@
 ﻿using Application.BlobService;
-using Application.Data;
 using Application.Email;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Models;
@@ -22,11 +21,10 @@ namespace WebApi.Controllers
         public async Task<IActionResult> AddBlob([FromForm] BlobFormDto blobFormDto)
         {
             var blobResult = await _blobService.UploadBlobAsync(blobFormDto.File.FileName, ContainerName, blobFormDto.File);
-
+            
             if (blobResult.IsSuccess)
             {
-                //TODO
-                var emailResult = await _emailService.Send("oleg.sergushin11@mail.ru", "FileLink");
+                var emailResult = await _emailService.Send(blobFormDto.Email, blobResult.Value);
                 return HandleResult(emailResult);
             }
             else
