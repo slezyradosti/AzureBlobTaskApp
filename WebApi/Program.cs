@@ -1,5 +1,6 @@
-using Application;
 using Application.BlobService;
+using Application.Core;
+using Application.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<BlobSecurity>(builder.Configuration.GetSection("AzureBlob"));
+builder.Services.Configure<SmtpSecutiry>(builder.Configuration.GetSection("SmtpMailruSecurity"));
 builder.Services.AddScoped<IBlobService, BlobService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
