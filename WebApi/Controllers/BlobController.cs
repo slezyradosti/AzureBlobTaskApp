@@ -21,25 +21,18 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBlob([FromForm] BlobFormDto blobFormDto)
         {
-            var file = blobFormDto.File;
-            if (file != null)
+            var blobResult = await _blobService.UploadBlobAsync(blobFormDto.File.FileName, ContainerName, blobFormDto.File);
+
+            if (blobResult.IsSuccess)
             {
-                if (Path.GetExtension(file.FileName) != ".docx") return BadRequest("Incorrect file type!\nFile type must be '.docx'");
-                
-                var blobResult = await _blobService.UploadBlobAsync(file.FileName, ContainerName, file);
-
-                if (blobResult.IsSuccess)
-                {
-                    var emailResult = await _emailService.Send("oleg.sergushin11@mail.ru", "FileLink");
-                    return HandleResult(emailResult);
-                }
-                else
-                {
-                    return HandleResult(blobResult);
-                }
+                //TODO
+                var emailResult = await _emailService.Send("oleg.sergushin11@mail.ru", "FileLink");
+                return HandleResult(emailResult);
             }
-
-            return BadRequest("File is not found");
+            else
+            {
+                return HandleResult(blobResult);
+            }
         }
     }
 }
