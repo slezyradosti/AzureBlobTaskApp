@@ -2,6 +2,7 @@
 using Application.Data;
 using Application.Email;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -18,25 +19,27 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBlob(IFormFile file)
+        public async Task<IActionResult> AddBlob([FromForm] BlobFormDto blobFormDto)
         {
+            var file = blobFormDto.File;
             if (file != null)
             {
                 if (Path.GetExtension(file.FileName) != ".docx") return BadRequest("Incorrect file type!\nFile type must be '.docx'");
                 
-                var result = await _blobService.UploadBlobAsync(file.FileName, ContainerName, file);
+                var blobResult = await _blobService.UploadBlobAsync(file.FileName, ContainerName, file);
 
-                if (result.IsSuccess)
+                if (blobResult.IsSuccess)
                 {
-                    await _emailService.Send("oleg.sergushin11@mail.ru", "FileLink");
-                    return Ok();
+                    var emailResult = await _emailService.Send("oleg.sergushin11@mail.ru", "FileLink");
+                    return HandleResult(emailResult);
                 }
-                return BadRequest();
+                else
+                {
+                    return HandleResult(blobResult);
+                }
             }
-            else
-            {
-                return BadRequest();
-            }
+
+            return BadRequest("File is not found");
         }
     }
 }

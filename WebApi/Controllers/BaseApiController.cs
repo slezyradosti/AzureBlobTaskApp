@@ -8,7 +8,7 @@ namespace WebApi.Controllers
     public class BaseApiController : ControllerBase
     {
         [NonAction]
-        protected ActionResult HandleResult<T>(Result<T> result, ILogger? logger = null)
+        protected ActionResult HandleResult<T>(Result<T> result)
         {
             if (result == null)
             {
