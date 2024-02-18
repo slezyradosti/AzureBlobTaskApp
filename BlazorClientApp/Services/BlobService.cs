@@ -1,8 +1,6 @@
-﻿using MimeKit;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using WebApi.Models;
-using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace BlazorClientApp.Services
 {
@@ -32,21 +30,13 @@ namespace BlazorClientApp.Services
                 };
                 content.Add(streamContent);
 
-
                 var response = await _httpClient.PostAsync("https://localhost:7153/Blob", content);
 
                 if (response == null) return null;
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseBody = await response.Content.ReadAsStreamAsync();
-
-                    var result = await JsonSerializer.DeserializeAsync<string>(responseBody, new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                    return result;
+                    return await response.Content.ReadAsStringAsync();
                 }
 
                 return response.Content.ToString();
