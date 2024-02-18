@@ -1,13 +1,13 @@
 ﻿using BlazorClientApp.Services;
 using Microsoft.AspNetCore.Components;
-using System.ComponentModel.DataAnnotations;
 using WebApi.Models;
 
 namespace BlazorClientApp.Data
 {
     public class Blobs
     {
-        public string Message { get; set; }
+        public string ErrorMessage { get; set; }
+        public string SuccessMessage { get; set; }
         public BlobFormDto blobFormDto { get; set; }
 
         [Inject]
@@ -15,22 +15,24 @@ namespace BlazorClientApp.Data
 
         public void HandleFailedRequest()
         {
-            Message = "Something went wrong, form not submited.";
+            ErrorMessage = "Something went wrong, form not submited.";
         }
 
-        public async void HandleValidRequest()
+        public async Task HandleValidRequestAsync()
         {
-            if (blobFormDto == null) Message = "All the fields are required!";
+            if (blobFormDto == null || blobFormDto.File == null || blobFormDto.Email == null) ErrorMessage = "All the fields are required!";
 
             var result = await _blobService.UploadBlobAsync(blobFormDto);
 
-            //if (result == null) Message = "Something went wrong, form not submited.";
-            if (result != null) Message = result;
+            if (result == null) ErrorMessage = "Something went wrong, form not submited.";
+            else if (result == "") SuccessMessage = "File successfully uploaded!";
+            else ErrorMessage = result;
         }
 
-        public Blobs()//(IBlobService blobService)
+        public Blobs()
         {
-            Message = string.Empty;
+            ErrorMessage = string.Empty;
+            SuccessMessage = string.Empty;
             blobFormDto = new BlobFormDto();
             _blobService = new BlobService(new HttpClient());
         }

@@ -1,13 +1,12 @@
 ﻿@page "/"
 @using BlazorClientApp.Data
 @using BlazorClientApp.Services
-@using WebApi.Models
 
 <div>
-    <EditForm Model="@blob" OnSubmit=@blob.HandleValidRequest>
+    <EditForm Model="@blob" OnSubmit=@blob.HandleValidRequestAsync>
         <div class="form-group">
             <label class="col-md-3">Email</label>
-            <InputText class="col-md-8 form-control" @bind-Value="@blob.blobFormDto.Email"></InputText>
+            <InputText class="col-md-8 form-control" @bind-Value="@blob.blobFormDto.Email" oninput="@ClearMessages"></InputText>
             <label class="col-md-3">FIle document</label>
             <InputFile OnChange="@LoadFiles" class="col-md-8 form-control" accept=".docx"></InputFile>
         </div>
@@ -16,16 +15,26 @@
             <button type="submit" class="btn btn-success">Submit</button>
         </div>
         <br/>
-        <p style="color: red">@blob.Message</p>
+        <p style="color: red">@blob.ErrorMessage</p>
+        <p style="color: sandybrown">@blob.SuccessMessage</p>
     </EditForm>
 </div>
 
 @code {
-    private Blobs blob = new Blobs();
+    private Blobs blob;
 
+    protected override void OnInitialized() => blob ??= new();
+
+    private void ClearMessages()
+    {
+        blob.ErrorMessage = string.Empty;
+        blob.SuccessMessage = string.Empty;
+    }
 
     private async Task LoadFiles(InputFileChangeEventArgs e)
     {
+        ClearMessages();
+
         byte[] fileBytes;
         using (var ms = new MemoryStream())
         {
