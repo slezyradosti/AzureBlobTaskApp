@@ -1,5 +1,11 @@
-﻿using BlazorClientApp.Services;
+﻿using Azure;
+using BlazorClientApp.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Text;
+using System.Text.Json;
 using WebApi.Models;
 
 namespace BlazorClientApp.Data
@@ -20,13 +26,37 @@ namespace BlazorClientApp.Data
 
         public async Task HandleValidRequestAsync()
         {
-            if (blobFormDto == null || blobFormDto.File == null || blobFormDto.Email == null) ErrorMessage = "All the fields are required!";
+            if (blobFormDto == null || blobFormDto.File == null || blobFormDto.Email == null)
+            {
+                ErrorMessage = "All the fields are required!";
+                return;
+            }
 
-            var result = await _blobService.UploadBlobAsync(blobFormDto);
+            var response = await _blobService.UploadBlobAsync(blobFormDto);
 
-            if (result == null) ErrorMessage = "Something went wrong, form not submited.";
-            else if (result == "") SuccessMessage = "File successfully uploaded!";
-            else ErrorMessage = result;
+            if (response == null) ErrorMessage = "Something went wrong, form not submited.";
+            else if (response.StatusCode == HttpStatusCode.OK)
+            {
+                SuccessMessage = "File successfully uploaded!";
+                return;
+            }
+            else
+            {
+                StringBuilder erros = new StringBuilder();
+
+                var body = await response.Content.ReadAsStringAsync();
+                var validationProblemDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(body);
+
+                if (validationProblemDetails.Errors != null)
+                {
+                    foreach (var error in validationProblemDetails.Errors)
+                    {
+                        erros.AppendLine(error.Value.FirstOrDefault());
+                    }
+                }
+
+                ErrorMessage = erros.ToString();
+            }
         }
 
         public Blobs()

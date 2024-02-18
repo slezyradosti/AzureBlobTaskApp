@@ -4,6 +4,6 @@ namespace BlazorClientApp.Services
 {
     public interface IBlobService
     {
-        public Task<string> UploadBlobAsync(BlobFormDto blobFormDto);
+        public Task<HttpResponseMessage> UploadBlobAsync(BlobFormDto blobFormDto);
     }
 }

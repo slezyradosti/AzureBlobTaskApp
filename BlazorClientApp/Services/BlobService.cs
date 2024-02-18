@@ -13,7 +13,7 @@ namespace BlazorClientApp.Services
             _httpClient = httpClient;
         }
 
-        public async Task<string> UploadBlobAsync(BlobFormDto blobFormDto)
+        public async Task<HttpResponseMessage> UploadBlobAsync(BlobFormDto blobFormDto)
         {
             try
             {
@@ -34,12 +34,13 @@ namespace BlazorClientApp.Services
 
                 if (response == null) return null;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    return await response.Content.ReadAsStringAsync();
+                //}
 
-                return response.Content.ToString();
+
+                return response;
             }
             catch (Exception e)
             {
