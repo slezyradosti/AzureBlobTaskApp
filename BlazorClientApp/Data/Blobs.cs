@@ -1,7 +1,5 @@
-﻿using Azure;
-using BlazorClientApp.Services;
+﻿using BlazorClientApp.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text;
