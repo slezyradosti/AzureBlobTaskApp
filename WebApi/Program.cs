@@ -11,6 +11,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(cfg =>
+    {
+        cfg.AllowAnyOrigin();
+        cfg.AllowAnyHeader();
+        cfg.AllowAnyMethod();
+    });
+});
+
 builder.Services.Configure<BlobSecurity>(builder.Configuration.GetSection("AzureBlob"));
 builder.Services.Configure<SmtpSecutiry>(builder.Configuration.GetSection("SmtpMailruSecurity"));
 builder.Services.AddScoped<IBlobService, BlobService>();
@@ -26,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

@@ -1,9 +1,86 @@
 ﻿@page "/"
+@using BlazorClientApp.Data
+@using BlazorClientApp.Services
+@using WebApi.Models
 
-<PageTitle>Index</PageTitle>
+<div>
+    <EditForm Model="@blob" OnSubmit=@blob.HandleValidRequest>
+        <div class="form-group">
+            <label class="col-md-3">Email</label>
+            <InputText class="col-md-8 form-control" @bind-Value="@blob.blobFormDto.Email"></InputText>
+            <label class="col-md-3">FIle document</label>
+            <InputFile OnChange="@LoadFiles" class="col-md-8 form-control" accept=".docx"></InputFile>
+        </div>
+        <br/>
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+        <br/>
+        <p style="color: red">@blob.Message</p>
+    </EditForm>
+</div>
 
-<h1>Hello, world!</h1>
+@* <div>
+    <EditForm Model=@blobFormDto OnValidSubmit=@HandleValidRequest OnInvalidSubmit=@HandleFailedRequest>
+        <div class="form-group">
+            <label class="col-md-3">Email</label>
+            <InputText class="col-md-8 form-control" @bind-Value="@blobFormDto.Email"></InputText>
+            <label class="col-md-3">FIle document</label>
+            <InputFile class="col-md-8 form-control" @bind-Value="@blobFormDto.File"></InputFile>
+        </div>
+        <br />
+        <div class="form-group">
+            <button type="button" class="btn btn-success">Submit</button>
+        </div>
+        <br />
+        <p style="color: red">@Message</p>
+    </EditForm>
+</div> *@
 
-Welcome to your new app.
+@code {
+    private Blobs blob = new Blobs();
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+
+    // public string Message { get; set; } = string.Empty;
+    // public BlobFormDto blobFormDto { get; set; }
+
+    // [Inject]
+    // private IBlobService _blobService { get; set; }
+
+    // void HandleFailedRequest()
+    // {
+    //     Message = "Something went wrong, form not submited.";
+    // }
+
+    // async Task HandleValidRequest()
+    // {
+    //     if (blobFormDto == null) Message = "Something went wrong, form not submited.";
+
+    //     var result = await _blobService.UploadBlobAsync(blobFormDto);
+
+    //     if (result == null) Message = "Something went wrong, form not submited.";
+    // }
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        byte[] fileBytes;
+        using (var ms = new MemoryStream())
+        {
+            await e.File.OpenReadStream().CopyToAsync(ms);
+            fileBytes = ms.ToArray();
+        }
+
+        var fileName = e.File.Name;
+        var contentType = e.File.ContentType;
+
+        // You may need to provide additional metadata like file name, content type, etc.
+        var formFile = new FormFile(new MemoryStream(fileBytes), 0, fileBytes.Length, null, fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = contentType,
+                ContentDisposition = $"form-data; name=\"file\"; filename=\"{fileName}\""
+            };
+
+        blob.blobFormDto.File = formFile;
+    }
+}
