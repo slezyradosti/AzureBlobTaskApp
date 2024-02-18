@@ -66,5 +66,13 @@ namespace BlazorClientApp.Data
             blobFormDto = new BlobFormDto();
             _blobService = new BlobService(new HttpClient());
         }
+
+        public Blobs(string errorMessage, string successMessage)
+        {
+            ErrorMessage = errorMessage;
+            SuccessMessage = successMessage;
+            blobFormDto = new BlobFormDto();
+            _blobService = new BlobService(new HttpClient());
+        }
     }
 }

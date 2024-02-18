@@ -9,13 +9,15 @@
             <InputText class="col-md-8 form-control" @bind-Value="@blob.blobFormDto.Email" oninput="@ClearMessages"></InputText>
             <label class="col-md-3">FIle document</label>
             <InputFile OnChange="@LoadFiles" class="col-md-8 form-control" accept=".docx"></InputFile>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <p style="color: red">@blob.ErrorMessage</p>
         </div>
         <br/>
         <div class="form-group">
-            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="submit" class="btn btn-success" disabled="@(!context.IsModified())">Submit</button>
         </div>
         <br/>
-        <p style="color: red">@blob.ErrorMessage</p>
         <p style="color: limegreen">@blob.SuccessMessage</p>
     </EditForm>
 </div>

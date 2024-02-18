@@ -34,12 +34,6 @@ namespace BlazorClientApp.Services
 
                 if (response == null) return null;
 
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    return await response.Content.ReadAsStringAsync();
-                //}
-
-
                 return response;
             }
             catch (Exception e)
