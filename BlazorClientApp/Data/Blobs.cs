@@ -35,7 +35,7 @@ namespace BlazorClientApp.Data
             if (response == null) ErrorMessage = "Something went wrong, form not submited.";
             else if (response.StatusCode == HttpStatusCode.OK)
             {
-                SuccessMessage = "File successfully uploaded!";
+                SuccessMessage = "File successfully uploaded! Check your email.";
                 return;
             }
             else
