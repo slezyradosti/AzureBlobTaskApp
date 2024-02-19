@@ -35,7 +35,7 @@ namespace ApiTest
         }
 
         [Fact]
-        public async Task PostRequestsFail()
+        public async Task PostRequestFileExtentionFail()
         {
             var workingDir = Directory.GetCurrentDirectory();
             string projectDir = Directory.GetParent(workingDir).Parent.Parent.FullName;
@@ -64,11 +64,42 @@ namespace ApiTest
             }
 
             Assert.False(_blobController.ModelState.IsValid);
-
         }
 
         [Fact]
-        public async Task PostRequestsSuccess()
+        public async Task PostRequestEmailFail()
+        {
+            var workingDir = Directory.GetCurrentDirectory();
+            string projectDir = Directory.GetParent(workingDir).Parent.Parent.FullName;
+            string filePath = $@"{projectDir}\BlobFiles\TestDoc.docx";
+            // Read the file into a byte array
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+
+            // Create a MemoryStream from the byte array
+            IFormFile trueFormFile;
+            IActionResult result = null;
+            using (var ms = new MemoryStream(fileBytes))
+            {
+                // Create an IFormFile instance using FormFile
+                trueFormFile = new FormFile(ms, 0, ms.Length, null, Path.GetFileName(filePath));
+
+                var blobFormDto = new BlobFormDto()
+                {
+                    Email = "tes",
+                    File = trueFormFile,
+                };
+
+                // manual data validation
+                _blobController.ValidateModel(blobFormDto);
+
+                result = await _blobController.AddBlob(blobFormDto);
+            }
+
+            Assert.False(_blobController.ModelState.IsValid);
+        }
+
+        [Fact]
+        public async Task PostRequestSuccess()
         {
             var workingDir = Directory.GetCurrentDirectory();
             string projectDir = Directory.GetParent(workingDir).Parent.Parent.FullName;
