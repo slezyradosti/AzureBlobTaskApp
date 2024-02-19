@@ -21,45 +21,29 @@ namespace ApiTest
             _emailService = new EmailService(Options.Create(smtpSecurity));
         }
 
-        [Fact]
-        public async Task SendMailsFail()
+        [Theory]
+        [InlineData(null, null)]
+        [InlineData("", null)]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("sss", "sss")]
+        [InlineData("sss", null)]
+        [InlineData(null, "sss")]
+        [InlineData("sss", "")]
+        [InlineData("", "sss")]
+        public async Task SendMailsFail(string recipientEmail, string fileLink)
         {
-            var result1 = await _emailService.SendAsync(null, null);
+            var result1 = await _emailService.SendAsync(recipientEmail, fileLink);
             Assert.False(result1.IsSuccess);
-
-            var result2 = await _emailService.SendAsync(string.Empty, null);
-            Assert.False(result2.IsSuccess);
-
-            var result3 = await _emailService.SendAsync(null, string.Empty);
-            Assert.False(result3.IsSuccess);
-
-            var result4 = await _emailService.SendAsync(string.Empty, string.Empty);
-            Assert.False(result4.IsSuccess);
-
-            var result5 = await _emailService.SendAsync("sss", "sss");
-            Assert.False(result5.IsSuccess);
-
-            var result6 = await _emailService.SendAsync("sss", null);
-            Assert.False(result6.IsSuccess);
-
-            var result7 = await _emailService.SendAsync(null, "sss");
-            Assert.False(result7.IsSuccess);
-
-            var result8 = await _emailService.SendAsync("sss", string.Empty);
-            Assert.False(result8.IsSuccess);
-
-            var result9 = await _emailService.SendAsync(string.Empty, "sss");
-            Assert.False(result9.IsSuccess);
         }
 
-        [Fact]
-        public async Task SendMailsSuccess()
+        [Theory]
+        [InlineData("test@testmail.com", "testlink")]
+        [InlineData("t@mail.com", "link2")]
+        public async Task SendMailsSuccess(string recipientEmail, string fileLink)
         {
-            var result1 = await _emailService.SendAsync("test@testmail.com", "testlink");
+            var result1 = await _emailService.SendAsync(recipientEmail, fileLink);
             Assert.True(result1.IsSuccess);
-
-            var result2 = await _emailService.SendAsync("t@mail.com", "link2");
-            Assert.True(result2.IsSuccess);
         }
     }
 }
