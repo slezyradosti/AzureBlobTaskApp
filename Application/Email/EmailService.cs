@@ -34,10 +34,10 @@ namespace Application.Email
 
         public async Task<Result<string>> SendAsync(string recipientEmail, string fileLink)
         {
-            if (string.IsNullOrEmpty(recipientEmail) || string.IsNullOrEmpty(fileLink)) 
-                return Result<string>.Failure("Recipient email value cannot be null");
+            if (string.IsNullOrEmpty(recipientEmail)) 
+                return Result<string>.Failure("Recipient email value cannot be null/empty");
             if (string.IsNullOrEmpty(fileLink)) 
-                return Result<string>.Failure("File link value cannot be null");
+                return Result<string>.Failure("File link value cannot be null/empty");
 
             var emailMessage = FormMessage(recipientEmail, fileLink);
 

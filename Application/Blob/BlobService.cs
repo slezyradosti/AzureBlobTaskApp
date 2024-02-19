@@ -20,6 +20,14 @@ namespace Application.BlobService
 
         public async Task<Result<string>> UploadBlobAsync(string BlobName, string containerName, IFormFile file)
         {
+            if (string.IsNullOrEmpty(BlobName))
+                return Result<string>.Failure("Blob name email value cannot be null/empty");
+            if (string.IsNullOrEmpty(containerName))
+                return Result<string>.Failure("Container name value cannot be null/empty");
+            if (file == null)
+                return Result<string>.Failure("File value cannot be null");
+
+
             CloudBlobClient blobClient = _storageAccount.CreateCloudBlobClient();
             CloudBlobContainer blobContainer = blobClient.GetContainerReference(containerName.ToLower());
             CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(BlobName);
@@ -64,7 +72,8 @@ namespace Application.BlobService
             }
             catch (Exception e)
             {
-                throw e;
+                Console.WriteLine(e.Message);
+                return null;
             }
         }
     }
