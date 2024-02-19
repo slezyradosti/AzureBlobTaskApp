@@ -1,6 +1,7 @@
 ﻿using Application.BlobService;
 using Application.Email;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using WebApi.Models;
 
 namespace WebApi.Controllers
