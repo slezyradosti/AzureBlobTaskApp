@@ -24,7 +24,7 @@ namespace WebApi.Controllers
             
             if (blobResult.IsSuccess)
             {
-                var emailResult = await _emailService.Send(blobFormDto.Email, blobResult.Value);
+                var emailResult = await _emailService.SendAsync(blobFormDto.Email, blobResult.Value);
                 return HandleResult(emailResult);
             }
             else

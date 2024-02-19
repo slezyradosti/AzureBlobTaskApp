@@ -5,6 +5,6 @@ namespace Application.Email
 {
     public interface IEmailService
     {
-        public Task<Result<string>> Send(string recipientEmail, string fileLink);
+        public Task<Result<string>> SendAsync(string recipientEmail, string fileLink);
     }
 }

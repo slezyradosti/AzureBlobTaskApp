@@ -32,7 +32,7 @@ namespace Application.Email
             return message;
         }
 
-        public async Task<Result<string>> Send(string recipientEmail, string fileLink)
+        public async Task<Result<string>> SendAsync(string recipientEmail, string fileLink)
         {
             if (string.IsNullOrEmpty(recipientEmail) || string.IsNullOrEmpty(fileLink)) 
                 return Result<string>.Failure("Recipient email value cannot be null");

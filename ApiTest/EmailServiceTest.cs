@@ -22,25 +22,25 @@ namespace ApiTest
         }
 
         [Fact]
-        public async Task FailMails()
+        public async Task SendMailsFail()
         {
-            var result1 = await _emailService.Send(null, null);
+            var result1 = await _emailService.SendAsync(null, null);
             Assert.False(result1.IsSuccess);
 
-            var result2 = await _emailService.Send(string.Empty, string.Empty);
+            var result2 = await _emailService.SendAsync(string.Empty, string.Empty);
             Assert.False(result2.IsSuccess);
 
-            var result3 = await _emailService.Send("sss", "sss");
+            var result3 = await _emailService.SendAsync("sss", "sss");
             Assert.False(result3.IsSuccess);
         }
 
         [Fact]
-        public async Task SuccessMails()
+        public async Task SendMailsSuccess()
         {
-            var result1 = await _emailService.Send("test@testmail.com", "testlink");
+            var result1 = await _emailService.SendAsync("test@testmail.com", "testlink");
             Assert.True(result1.IsSuccess);
 
-            var result2 = await _emailService.Send("t@mail.com", "link2");
+            var result2 = await _emailService.SendAsync("t@mail.com", "link2");
             Assert.True(result2.IsSuccess);
         }
     }
