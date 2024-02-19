@@ -26,7 +26,7 @@ namespace Application.Email
                 RecipientEmail = recipientEmail, //"oleg.sergushin11@mail.ru",
                 RecipientName = "User",
                 Subject = "File Uploading Notification",
-                Content = $"Hello, your file is successfuly uploaded!\nYou can find it on: {fileLink}",
+                Content = $"Hello, your file is successfuly uploaded!\nThe file is available with 1 hour by link: {fileLink}",
             };
 
             return message;
@@ -34,6 +34,11 @@ namespace Application.Email
 
         public async Task<Result<string>> Send(string recipientEmail, string fileLink)
         {
+            if (string.IsNullOrEmpty(recipientEmail) || string.IsNullOrEmpty(fileLink)) 
+                return Result<string>.Failure("Recipient email value cannot be null");
+            if (string.IsNullOrEmpty(fileLink)) 
+                return Result<string>.Failure("File link value cannot be null");
+
             var emailMessage = FormMessage(recipientEmail, fileLink);
 
             var message = new MimeMessage();
