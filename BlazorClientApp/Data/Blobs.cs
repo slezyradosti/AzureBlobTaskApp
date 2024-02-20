@@ -12,7 +12,7 @@ namespace BlazorClientApp.Data
     {
         public string ErrorMessage { get; set; }
         public string SuccessMessage { get; set; }
-        public BlobFormDto blobFormDto { get; set; }
+        public BlobForm blobFormDto { get; set; }
 
         [Inject]
         private IBlobService _blobService { get; set; }
@@ -61,7 +61,7 @@ namespace BlazorClientApp.Data
         {
             ErrorMessage = string.Empty;
             SuccessMessage = string.Empty;
-            blobFormDto = new BlobFormDto();
+            blobFormDto = new BlobForm();
             _blobService = new BlobService(new HttpClient());
         }
 
@@ -69,7 +69,7 @@ namespace BlazorClientApp.Data
         {
             ErrorMessage = errorMessage;
             SuccessMessage = successMessage;
-            blobFormDto = new BlobFormDto();
+            blobFormDto = new BlobForm();
             _blobService = new BlobService(new HttpClient());
         }
     }

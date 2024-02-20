@@ -1,6 +1,6 @@
 ﻿using Application.Core;
+using Application.DTOs;
 using Azure.Storage;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -18,9 +18,13 @@ namespace Application.BlobService
             _storageAccount = CloudStorageAccount.Parse(options.Value.AzureBlobConnectionString);
         }
 
-        public async Task<Result<string>> UploadBlobAsync(string BlobName, string containerName, IFormFile file)
+        public async Task<Result<string>> UploadBlobAsync(BlobFormDto blobFormDto, string containerName)
         {
-            if (string.IsNullOrEmpty(BlobName))
+            var blobName = blobFormDto.File.FileName;
+            var file = blobFormDto.File;
+            var recipientEmail = blobFormDto.Email;
+
+            if (string.IsNullOrEmpty(blobName))
                 return Result<string>.Failure("Blob name email value cannot be null/empty");
             if (string.IsNullOrEmpty(containerName))
                 return Result<string>.Failure("Container name value cannot be null/empty");
@@ -30,14 +34,9 @@ namespace Application.BlobService
 
             CloudBlobClient blobClient = _storageAccount.CreateCloudBlobClient();
             CloudBlobContainer blobContainer = blobClient.GetContainerReference(containerName.ToLower());
-            CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(BlobName);
+            CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(blobName);
 
-
-            //
-            blockBlob.Metadata["email"] = "oleg.sergushin11@mail.ru";
-            blockBlob.Metadata["fileLink"] = blockBlob.StorageUri.PrimaryUri.ToString();
-            await blockBlob.SetMetadataAsync();
-            //
+            await SetMedataToBlob(blockBlob, recipientEmail);
 
             try
             {
@@ -48,14 +47,29 @@ namespace Application.BlobService
                     await blockBlob.UploadFromStreamAsync(ms);
                 }
 
-                var sasTocken = GetBlobSASTokenByFile(BlobName, containerName);
+                var sasTocken = GetBlobSASTokenByFile(blobName, containerName);
                 var blobUrl = blockBlob.StorageUri.PrimaryUri + "?" + sasTocken;
 
-                return Result<string>.Success(blobUrl);
+                //return Result<string>.Success(blobUrl);
+                return Result<string>.Success("");
             }
             catch (Exception e)
             {
                 return Result<string>.Failure(e.Message);
+            }
+        }
+
+        private async Task SetMedataToBlob(CloudBlockBlob cloudBlockBlob, string email)
+        {
+            try
+            {
+                cloudBlockBlob.Metadata["email"] = email;
+                cloudBlockBlob.Metadata["fileLink"] = cloudBlockBlob.StorageUri.PrimaryUri.ToString();
+                await cloudBlockBlob.SetMetadataAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 

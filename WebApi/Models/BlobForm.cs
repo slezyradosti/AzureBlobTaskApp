@@ -3,7 +3,7 @@ using FileExtensionsAttribute = WebApi.AttributeExtensions.FileExtensionsAttribu
 
 namespace WebApi.Models
 {
-    public class BlobFormDto
+    public class BlobForm
     {
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Use correct email address")]

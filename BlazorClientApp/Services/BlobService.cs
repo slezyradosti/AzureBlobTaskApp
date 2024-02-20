@@ -13,7 +13,7 @@ namespace BlazorClientApp.Services
             _httpClient = httpClient;
         }
 
-        public async Task<HttpResponseMessage> UploadBlobAsync(BlobFormDto blobFormDto)
+        public async Task<HttpResponseMessage> UploadBlobAsync(BlobForm blobFormDto)
         {
             try
             {

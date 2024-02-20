@@ -51,7 +51,7 @@ namespace ApiTest
                 // Create an IFormFile instance using FormFile
                 trueFormFile = new FormFile(ms, 0, ms.Length, null, Path.GetFileName(filePath));
 
-                var blobFormDto = new BlobFormDto()
+                var blobFormDto = new BlobForm()
                 {
                     Email = "test@mail.com",
                     File = trueFormFile,
@@ -83,7 +83,7 @@ namespace ApiTest
                 // Create an IFormFile instance using FormFile
                 trueFormFile = new FormFile(ms, 0, ms.Length, null, Path.GetFileName(filePath));
 
-                var blobFormDto = new BlobFormDto()
+                var blobFormDto = new BlobForm()
                 {
                     Email = "tes",
                     File = trueFormFile,
@@ -115,7 +115,7 @@ namespace ApiTest
                 // Create an IFormFile instance using FormFile
                 trueFormFile = new FormFile(ms, 0, ms.Length, null, Path.GetFileName(filePath));
 
-                var blobFormDto = new BlobFormDto()
+                var blobFormDto = new BlobForm()
                 {
                     Email = "test@mail.com",
                     File = trueFormFile,

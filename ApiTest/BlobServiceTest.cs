@@ -1,5 +1,6 @@
 ﻿using Application.BlobService;
 using Application.Core;
+using Application.DTOs;
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -31,14 +32,12 @@ namespace ApiTest
         [InlineData("ss", "ss")]
         [InlineData("ss", null)]
         [InlineData(null, "ss")]
-        public async Task UploadFilesFail(string BlobName, string ContainerName)
+        public async Task UploadFilesFail(string blobName, string ContainerName)
         {
             IFormFile fakeFormFile = A.Fake<IFormFile>();
-            var blobResult1 = await _blobService.UploadBlobAsync(BlobName, ContainerName, fakeFormFile);
+            var blobDto = new BlobFormDto { Email = "", File = fakeFormFile };
+            var blobResult1 = await _blobService.UploadBlobAsync(blobDto, ContainerName);
             Assert.False(blobResult1.IsSuccess);
-
-            var blobResult2 = await _blobService.UploadBlobAsync(BlobName, ContainerName, null);
-            Assert.False(blobResult2.IsSuccess);
         }
 
         [Theory]
@@ -59,7 +58,8 @@ namespace ApiTest
             {
                 // Create an IFormFile instance using FormFile
                 trueFormFile = new FormFile(ms, 0, ms.Length, null, Path.GetFileName(filePath));
-                blobResult9 = await _blobService.UploadBlobAsync(trueFormFile.FileName, "tesktask", trueFormFile);
+                var blobDto = new BlobFormDto { Email = "test", File = trueFormFile };
+                blobResult9 = await _blobService.UploadBlobAsync(blobDto, "tesktask");
             }
             Assert.True(blobResult9.IsSuccess);
         }
