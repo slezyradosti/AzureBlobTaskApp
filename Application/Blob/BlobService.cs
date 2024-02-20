@@ -32,6 +32,13 @@ namespace Application.BlobService
             CloudBlobContainer blobContainer = blobClient.GetContainerReference(containerName.ToLower());
             CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(BlobName);
 
+
+            //
+            blockBlob.Metadata["email"] = "oleg.sergushin11@mail.ru";
+            blockBlob.Metadata["fileLink"] = blockBlob.StorageUri.PrimaryUri.ToString();
+            await blockBlob.SetMetadataAsync();
+            //
+
             try
             {
                 using (var ms = new MemoryStream())

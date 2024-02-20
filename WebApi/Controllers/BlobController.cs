@@ -1,6 +1,7 @@
 ﻿using Application.BlobService;
 using Application.Email;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.WindowsAzure.Storage.Blob;
 using System.ComponentModel.DataAnnotations;
 using WebApi.Models;
 
@@ -23,15 +24,17 @@ namespace WebApi.Controllers
         {
             var blobResult = await _blobService.UploadBlobAsync(blobFormDto.File.FileName, ContainerName, blobFormDto.File);
             
-            if (blobResult.IsSuccess)
-            {
-                var emailResult = await _emailService.SendAsync(blobFormDto.Email, blobResult.Value);
-                return HandleResult(emailResult);
-            }
-            else
-            {
-                return HandleResult(blobResult);
-            }
+            //if (blobResult.IsSuccess)
+            //{
+            //    var emailResult = await _emailService.SendAsync(blobFormDto.Email, blobResult.Value);
+            //    return HandleResult(emailResult);
+            //}
+            //else
+            //{
+            //    return HandleResult(blobResult);
+            //}
+
+            return HandleResult(blobResult);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Application.Email
             {
                 SenderEmail = _smtpSecutiry.Login,
                 SenderName = "Document Service",
-                RecipientEmail = recipientEmail, //"oleg.sergushin11@mail.ru",
+                RecipientEmail = recipientEmail,
                 RecipientName = "User",
                 Subject = "File Uploading Notification",
                 Content = $"Hello, your file is successfuly uploaded!\nThe file is available with 1 hour by link: {fileLink}",

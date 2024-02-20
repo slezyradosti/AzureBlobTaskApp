@@ -1,18 +1,23 @@
 using System;
 using System.IO;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
 namespace FunctionApp
 {
     public class Function1
     {
-        [FunctionName("Function1")]
-        public void Run([BlobTrigger("tesktask/{name}", Connection = "AzureWebJobsStorage")]
-            Stream myBlob, string name, ILogger log)
+        private readonly ILogger _logger;
+
+        public Function1(ILoggerFactory loggerFactory)
         {
-            log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
+            _logger = loggerFactory.CreateLogger<Function1>();
+        }
+
+        [Function("Function1")]
+        public void Run([BlobTrigger("tesktask/{name}", Connection = "")] string myBlob, string name)
+        {
+            _logger.LogInformation($"C# Blob trigger function Processed blob\n Name: {name} \n Data: {myBlob}");
         }
     }
 }
