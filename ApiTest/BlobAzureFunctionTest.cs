@@ -1,10 +1,5 @@
-﻿using Application.Core;
-using FakeItEasy;
+﻿using FakeItEasy;
 using FunctionApp;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using WebApi.Controllers;
-using WebApi.Models;
 
 namespace ApiTest
 {

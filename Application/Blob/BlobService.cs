@@ -52,7 +52,6 @@ namespace Application.BlobService
 
                 var blobUrl = blockBlob.StorageUri.PrimaryUri + "?" + sasTocken;
 
-                //return Result<string>.Success(blobUrl);
                 return Result<string>.Success("");
             }
             catch (Exception e)
