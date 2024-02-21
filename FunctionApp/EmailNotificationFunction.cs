@@ -1,8 +1,7 @@
-using Application.Email;
 using Application.Core;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Azure.Functions.Worker;
+using Application.Email;
 
 namespace FunctionApp
 {
@@ -10,17 +9,16 @@ namespace FunctionApp
     {
         private readonly EmailService _emailService;
 
-        public EmailNotificationFunction()
+        public EmailNotificationFunction(IOptions<SmtpData> options)
         {
-            var configuration = new ConfigurationBuilder()
-            .AddUserSecrets<EmailNotificationFunction>()
-            .Build();
-
-            SmtpSecutiry smtpSecurity = new SmtpSecutiry();
-            //configuration.GetSection("SmtpSecurity").Bind(smtpSecurity);
-            configuration.GetSection("SmtpGmailSecurity").Bind(smtpSecurity);
-
-            _emailService = new EmailService(Options.Create(smtpSecurity));
+            SmtpSecutiry smtpSecutiry = new SmtpSecutiry()
+            {
+                SMTPServer = options.Value.SMTPServer,
+                Port = options.Value.Port,
+                Login = options.Value.Login,
+                Password = options.Value.Password,
+            };
+            _emailService = new EmailService(Options.Create(smtpSecutiry));
         }
 
         [Function(nameof(EmailNotificationFunction))]

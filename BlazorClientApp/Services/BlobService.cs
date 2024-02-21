@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using BlazorClientApp.Data;
+using System.Text;
 using System.Text.Json;
 using WebApi.Models;
 
@@ -30,7 +31,7 @@ namespace BlazorClientApp.Services
                 };
                 content.Add(streamContent);
 
-                var response = await _httpClient.PostAsync("https://localhost:7153/Blob", content);
+                var response = await _httpClient.PostAsync(ApiData.ApiLink + "Blob", content);
 
                 if (response == null) return null;
 
