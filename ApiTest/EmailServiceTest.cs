@@ -16,7 +16,7 @@ namespace ApiTest
             .Build();
 
             SmtpSecutiry smtpSecurity = new SmtpSecutiry();
-            configuration.GetSection("SmtpOutlookSecurity").Bind(smtpSecurity);
+            configuration.GetSection("SmtpGmailSecurity").Bind(smtpSecurity);
 
             _emailService = new EmailService(Options.Create(smtpSecurity));
         }
@@ -38,8 +38,8 @@ namespace ApiTest
         }
 
         [Theory]
-        [InlineData("test@testmail.com", "testlink")]
-        [InlineData("t@mail.com", "link2")]
+        [InlineData("existingmail1@mail.com", "testlink")]
+        [InlineData("existingmail2@mail.com", "link2")]
         public async Task SendMailsSuccess(string recipientEmail, string fileLink)
         {
             var result1 = await _emailService.SendAsync(recipientEmail, fileLink);

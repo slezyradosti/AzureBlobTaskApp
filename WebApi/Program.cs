@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.Configure<BlobSecurity>(builder.Configuration.GetSection("AzureBlob"));
-builder.Services.Configure<SmtpSecutiry>(builder.Configuration.GetSection("SmtpMailruSecurity"));
+builder.Services.Configure<SmtpSecutiry>(builder.Configuration.GetSection("SmtpGmailSecurity"));
 builder.Services.AddScoped<IBlobService, BlobService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 

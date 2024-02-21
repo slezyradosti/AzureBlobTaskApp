@@ -18,7 +18,7 @@ namespace FunctionApp
 
             SmtpSecutiry smtpSecurity = new SmtpSecutiry();
             //configuration.GetSection("SmtpSecurity").Bind(smtpSecurity);
-            configuration.GetSection("SmtpOutlookSecurity").Bind(smtpSecurity);
+            configuration.GetSection("SmtpGmailSecurity").Bind(smtpSecurity);
 
             _emailService = new EmailService(Options.Create(smtpSecurity));
         }
@@ -30,6 +30,7 @@ namespace FunctionApp
             var email = metaData["email"];
             var fileLink = metaData["fileLink"];
 
+            await Task.Delay(5000);
             var result = await _emailService.SendAsync(email, fileLink);
 
             return result.IsSuccess;

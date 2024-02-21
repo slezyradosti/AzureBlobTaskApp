@@ -34,8 +34,8 @@ namespace ApiTest
         }
 
         [Theory]
-        [InlineData("niyosev242@huizk.com", "link1", "n")]
-        [InlineData("receb56544@gexige.com", "link2", "")]
+        [InlineData("existingmail1@mail.com", "link1", "")]
+        [InlineData("existingmail2@mail.com", "link2", "")]
         public async Task FunctionRunSuccess(string email, string fileLink, string name)
         {
             EmailNotificationFunction emailNotificationFunction = new EmailNotificationFunction();
