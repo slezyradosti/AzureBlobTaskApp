@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /WebApi/appsettings.json
 /FunctionApp/appsettings.json
+/WebApi/appsettings.Development.json
+/BlazorClientApp/appsettings.Development.json
