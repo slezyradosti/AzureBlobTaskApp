@@ -1,4 +1,7 @@
 name: Build and deploy .NET Core application to Web App testtaskwebapp
+              - name: Azure Login
+                uses: Azure/login@v1.6.1
+            
 on:
   push:
     branches:
