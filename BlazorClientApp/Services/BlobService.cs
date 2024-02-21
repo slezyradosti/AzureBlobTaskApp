@@ -31,7 +31,7 @@ namespace BlazorClientApp.Services
                 };
                 content.Add(streamContent);
 
-                var response = await _httpClient.PostAsync(ApiData.AzureApiLink + "Blob", content);
+                var response = await _httpClient.PostAsync(ApiData.ApiHttpsLink + "Blob", content);
 
                 if (response == null) return null;
 

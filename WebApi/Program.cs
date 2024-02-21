@@ -1,46 +1,27 @@
-using Application.BlobService;
-using Application.Core;
-using Application.Email;
+using Microsoft.AspNetCore.Identity;
+using WebApi;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddCors(options =>
+namespace WebAapi
 {
-    options.AddDefaultPolicy(cfg =>
+    public class Program
     {
-        cfg.AllowAnyOrigin();
-        cfg.AllowAnyHeader();
-        cfg.AllowAnyMethod();
-    });
-});
+        public static async Task Main(string[] args)
+        {
+            var host = CreateHost(args).Build();
 
-builder.Services.Configure<BlobSecurity>(builder.Configuration.GetSection("AzureBlob"));
-builder.Services.Configure<SmtpSecutiry>(builder.Configuration.GetSection("SmtpGmailSecurity"));
-builder.Services.AddScoped<IBlobService, BlobService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
+            using var scope = host.Services.CreateScope();
 
-var app = builder.Build();
+            var services = scope.ServiceProvider;
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+            await host.RunAsync();
+        }
+
+        public static IHostBuilder CreateHost(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseUrls("http://*:7177", "https://*:7172");
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseCors();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
