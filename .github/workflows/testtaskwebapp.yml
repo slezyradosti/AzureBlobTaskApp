@@ -33,6 +33,8 @@ jobs:
       with:
         name: webapp
         path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+         - name: Azure Login
+                uses: Azure/login@v1.6.1
   deploy:
     runs-on: windows-latest
     needs: build
@@ -49,5 +51,4 @@ jobs:
         publish-profile: ${{ secrets.testtaskwebapp_E186 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
-        - name: Azure Login
-                uses: Azure/login@v1.6.1
+       
