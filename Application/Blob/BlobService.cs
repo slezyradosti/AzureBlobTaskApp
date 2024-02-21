@@ -48,6 +48,8 @@ namespace Application.BlobService
                 }
 
                 var sasTocken = GetBlobSASTokenByFile(blobName, containerName);
+                if (sasTocken == null) Result<string>.Failure("Unable to create SAS token");
+
                 var blobUrl = blockBlob.StorageUri.PrimaryUri + "?" + sasTocken;
 
                 //return Result<string>.Success(blobUrl);

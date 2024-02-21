@@ -23,13 +23,15 @@ namespace FunctionApp
         }
 
         [Function(nameof(EmailNotificationFunction))]
-        public async Task Run([BlobTrigger("tesktask/{name}", Connection = "AzureWebJobsStorage")] Stream stream, string name, 
+        public async Task<bool> Run([BlobTrigger("tesktask/{name}", Connection = "AzureWebJobsStorage")] Stream stream, string name, 
             IDictionary<string, string> metaData)
         {
             var email = metaData["email"];
             var fileLink = metaData["fileLink"];
 
-            await _emailService.SendAsync(email, fileLink);
+            var result = await _emailService.SendAsync(email, fileLink);
+
+            return result.IsSuccess;
         }
     }
 }

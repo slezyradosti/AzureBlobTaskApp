@@ -21,17 +21,12 @@ namespace ApiTest
             .AddUserSecrets<BlobControllerTest>()
             .Build();
 
-            SmtpSecutiry smtpSecurity = new SmtpSecutiry();
-            configuration.GetSection("SmtpSecurity").Bind(smtpSecurity);
-
-            var emailService = new EmailService(Options.Create(smtpSecurity));
-
             BlobSecurity blobSecurity = new BlobSecurity();
             configuration.GetSection("AzureBlob").Bind(blobSecurity);
 
             var blobService = new BlobService(Options.Create(blobSecurity));
 
-            _blobController = new BlobController(blobService, emailService);
+            _blobController = new BlobController(blobService);
         }
 
         [Fact]
