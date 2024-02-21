@@ -17,7 +17,8 @@ namespace FunctionApp
             .Build();
 
             SmtpSecutiry smtpSecurity = new SmtpSecutiry();
-            configuration.GetSection("SmtpSecurity").Bind(smtpSecurity);
+            //configuration.GetSection("SmtpSecurity").Bind(smtpSecurity);
+            configuration.GetSection("SmtpOutlookSecurity").Bind(smtpSecurity);
 
             _emailService = new EmailService(Options.Create(smtpSecurity));
         }

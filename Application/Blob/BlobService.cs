@@ -36,8 +36,6 @@ namespace Application.BlobService
             CloudBlobContainer blobContainer = blobClient.GetContainerReference(containerName.ToLower());
             CloudBlockBlob blockBlob = blobContainer.GetBlockBlobReference(blobName);
 
-            await SetMedataToBlob(blockBlob, recipientEmail);
-
             try
             {
                 using (var ms = new MemoryStream())
@@ -52,6 +50,8 @@ namespace Application.BlobService
 
                 var blobUrl = blockBlob.StorageUri.PrimaryUri + "?" + sasTocken;
 
+                await SetMedataToBlob(blockBlob, recipientEmail, blobUrl);
+
                 return Result<string>.Success("");
             }
             catch (Exception e)
@@ -60,12 +60,12 @@ namespace Application.BlobService
             }
         }
 
-        private async Task SetMedataToBlob(CloudBlockBlob cloudBlockBlob, string email)
+        private async Task SetMedataToBlob(CloudBlockBlob cloudBlockBlob, string email, string blobUrl)
         {
             try
             {
                 cloudBlockBlob.Metadata["email"] = email;
-                cloudBlockBlob.Metadata["fileLink"] = cloudBlockBlob.StorageUri.PrimaryUri.ToString();
+                cloudBlockBlob.Metadata["fileLink"] = blobUrl;
                 await cloudBlockBlob.SetMetadataAsync();
             }
             catch (Exception e)
