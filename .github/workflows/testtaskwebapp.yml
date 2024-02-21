@@ -1,6 +1,5 @@
 name: Build and deploy .NET Core application to Web App testtaskwebapp
-              - name: Azure Login
-                uses: Azure/login@v1.6.1
+              
             
 on:
   push:
@@ -49,3 +48,6 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.testtaskwebapp_E186 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+        - name: Azure Login
+                uses: Azure/login@v1.6.1
